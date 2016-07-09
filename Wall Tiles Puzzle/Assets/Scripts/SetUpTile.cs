@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 
 public class SetUpTile : MonoBehaviour
 {
@@ -14,16 +15,32 @@ public class SetUpTile : MonoBehaviour
 
 	public void TranslateTile(int moveX, int moveY, int moveZ)
 	{
+		SerializedObject serializedObject = new SerializedObject(this);
+		SerializedProperty sp_indexX = serializedObject.FindProperty("indexX");
+		SerializedProperty sp_indexY = serializedObject.FindProperty("indexY");
+		SerializedProperty sp_indexZ = serializedObject.FindProperty("indexZ");
+
 		indexX += moveX;
 		indexY += moveY;
 		indexZ += moveZ;
+
+		sp_indexX.intValue = indexX;
+		sp_indexY.intValue = indexY;
+		sp_indexZ.intValue = indexZ;
+		
+		serializedObject.ApplyModifiedProperties();
 
 		UpdateTransform();
 	}
 
 	public void OrientTile(Vector3 _facingDirection)
 	{
-		facingDirection = _facingDirection;
+		SerializedObject serializedObject = new SerializedObject(this);
+		SerializedProperty sp_facingDirection = serializedObject.FindProperty("facingDirection");
+
+		sp_facingDirection.vector3Value = _facingDirection;
+		serializedObject.ApplyModifiedProperties();
+
 		transform.localRotation = Quaternion.LookRotation(facingDirection);
 
 		UpdateTransform();

@@ -3,63 +3,77 @@ using System.Collections;
 
 public class TilePlayer : MonoBehaviour
 {
+	private int ccwRotation = 0;
+
 	public enum Direction
 	{
-		RIGHT,
-		LEFT,
 		UP,
-		DOWN
+		RIGHT,
+		DOWN,
+		LEFT
 	}
 
 	void Start ()
 	{
-	
+		
 	}
 	
 	void Update ()
 	{
+		bool isReceivingDirectionalInput = false;
+		Direction inputDirection = Direction.UP;
 		if (Input.GetButtonDown("TileRight"))
 		{
-			MovePlayer(Direction.RIGHT);
+			inputDirection = Direction.RIGHT;
+			isReceivingDirectionalInput = true;
 		}
 		else if (Input.GetButtonDown("TileLeft"))
 		{
-			MovePlayer(Direction.LEFT);
+			inputDirection = Direction.LEFT;
+			isReceivingDirectionalInput = true;
 		}
 		if (Input.GetButtonDown("TileUp"))
 		{
-			MovePlayer(Direction.UP);
+			inputDirection = Direction.UP;
+			isReceivingDirectionalInput = true;
 		}
 		else if (Input.GetButtonDown("TileDown"))
 		{
-			MovePlayer(Direction.DOWN);
+			inputDirection = Direction.DOWN;
+			isReceivingDirectionalInput = true;
+		}
+
+		if (isReceivingDirectionalInput)
+		{
+			MovePlayer((Direction)(((int)inputDirection + ccwRotation) % 4));
 		}
 	}
 
 	bool MovePlayer(Direction d)
 	{
 		TileObject myTileObject = GetComponent<TileObject>();
+		TileBase myTileBase = myTileObject.GetBaseTile();
 		TileBase tileToMoveTo = null;
 		switch (d)
 		{
 			case Direction.RIGHT:
 				{
-					tileToMoveTo = myTileObject.GetBaseTile().neighborRight;
+					tileToMoveTo = myTileBase.neighborRight;
 					break;
 				}
 			case Direction.LEFT:
 				{
-					tileToMoveTo = myTileObject.GetBaseTile().neighborLeft;
+					tileToMoveTo = myTileBase.neighborLeft;
 					break;
 				}
 			case Direction.UP:
 				{
-					tileToMoveTo = myTileObject.GetBaseTile().neighborUp;
+					tileToMoveTo = myTileBase.neighborUp;
 					break;
 				}
 			case Direction.DOWN:
 				{
-					tileToMoveTo = myTileObject.GetBaseTile().neighborDown;
+					tileToMoveTo = myTileBase.neighborDown;
 					break;
 				}
 			default:
@@ -70,7 +84,57 @@ public class TilePlayer : MonoBehaviour
 
 		if (tileToMoveTo != null)
 		{
-			myTileObject.MoveToBaseTile(tileToMoveTo);
+			// figure out new ccwRotation
+			SetUpTile mySetUpTile = myTileBase.GetComponent<SetUpTile>();
+			SetUpTile destinationSetUpTile = tileToMoveTo.GetComponent<SetUpTile>();
+			if (mySetUpTile.facingDirection == destinationSetUpTile.facingDirection)
+			{
+				// stay the same
+			}
+			else if (destinationSetUpTile.facingDirection == Vector3.up)
+			{
+				if (mySetUpTile.facingDirection == Vector3.left)
+				{
+					ccwRotation = 1;
+				}
+				else if (mySetUpTile.facingDirection == Vector3.right)
+				{
+					ccwRotation = 3;
+				}
+				else if (mySetUpTile.facingDirection == Vector3.back)
+				{
+					ccwRotation = 2;
+				}
+				else if (mySetUpTile.facingDirection == Vector3.forward)
+				{
+					ccwRotation = 0;
+				}
+			}
+			else if (destinationSetUpTile.facingDirection == Vector3.down)
+			{
+				if (mySetUpTile.facingDirection == Vector3.left)
+				{
+					ccwRotation = 3;
+				}
+				else if (mySetUpTile.facingDirection == Vector3.right)
+				{
+					ccwRotation = 1;
+				}
+				else if (mySetUpTile.facingDirection == Vector3.back)
+				{
+					ccwRotation = 2;
+				}
+				else if (mySetUpTile.facingDirection == Vector3.forward)
+				{
+					ccwRotation = 0;
+				}
+			}
+			else
+			{
+				ccwRotation = 0;
+			}
+
+			myTileObject.MoveToBaseTile(tileToMoveTo, ccwRotation);
 			return true;
 		}
 		else

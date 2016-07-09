@@ -30,11 +30,17 @@ public class TileObject : MonoBehaviour
 
 	public void MoveToBaseTile(TileBase tileBase)
 	{
+		MoveToBaseTile(tileBase, 0);
+	}
+
+	public void MoveToBaseTile(TileBase tileBase, int ccwRotation)
+	{
 		Transform _transform = tileBase.transform;
 
 		transform.SetParent(_transform);
 		transform.localPosition = Vector3.zero;
 		transform.localRotation = Quaternion.identity;
+		transform.Rotate(Vector3.back, (90.0f * ccwRotation));
 		transform.localScale = Vector3.one;
 	}
 
