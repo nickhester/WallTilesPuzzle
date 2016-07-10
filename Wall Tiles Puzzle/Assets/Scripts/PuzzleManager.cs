@@ -7,7 +7,7 @@ public class PuzzleManager : MonoBehaviour
 	private List<TileBase> baseTiles = new List<TileBase>();
 	private List<TileObject> objectTiles = new List<TileObject>();
 	public GameObject playerPrefab;
-	private TilePlayer player;
+	private TileObject_Player player;
 
 	void Start ()
 	{
@@ -19,7 +19,7 @@ public class PuzzleManager : MonoBehaviour
 		foreach (TileObject tile in objectTiles)
 		{
 			// find player start, but don't spawn player there yet
-			if (tile.GetMyTileType() == TileObject.TileType.PlayerStart)
+			if (tile as TileObject_PlayerStart)
 			{
 				playerStartTile = tile;
 			}
@@ -38,7 +38,7 @@ public class PuzzleManager : MonoBehaviour
 		if (playerStartTile != null)
 		{
 			GameObject playerGo = (Instantiate(playerPrefab) as GameObject);
-			player = playerGo.GetComponent<TilePlayer>();
+			player = playerGo.GetComponent<TileObject_Player>();
 			TileBase _tileBase = playerStartTile.GetComponentInParent<TileBase>();
 			player.transform.SetParent(_tileBase.transform);
 			playerGo.GetComponent<TileObject>().MoveToBaseTile(_tileBase);
