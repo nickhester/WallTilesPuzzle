@@ -35,7 +35,7 @@ public class TileObject_Player : TileObject
 		}
 	}
 
-	public override bool CanObjectMoveOntoMe(TileObject _tileObject, TileObject.Direction _fromDirection)
+	public override bool ObjectAttemptsToMoveOnToMe(TileObject _tileObject, TileObject.Direction _fromDirection)
 	{
 		return false;
 	}

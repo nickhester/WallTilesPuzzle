@@ -9,7 +9,8 @@ public abstract class TileObject : MonoBehaviour
 		None,
 		PlayerStart,
 		Exit,
-		Obstacle
+		Obstacle,
+		Crate
 	}
 
 	public enum Direction
@@ -22,7 +23,7 @@ public abstract class TileObject : MonoBehaviour
 
 	protected int ccwRotation = 0;
 
-	public abstract bool CanObjectMoveOntoMe(TileObject _tileObject, Direction _fromDirection);
+	public abstract bool ObjectAttemptsToMoveOnToMe(TileObject _tileObject, Direction _fromDirection);
 
 	public bool MoveToBaseTile(Direction _comingFromDirection, TileBase _tileBase, int _ccwRotation)
 	{
@@ -35,7 +36,7 @@ public abstract class TileObject : MonoBehaviour
 		{
 			foreach (TileObject _tileObject in _tileBase.GetAllOccupyingTileObjects())
 			{
-				if (!_tileObject.CanObjectMoveOntoMe(this, _comingFromDirection))
+				if (!_tileObject.ObjectAttemptsToMoveOnToMe(this, _comingFromDirection))
 				{
 					return false;
 				}

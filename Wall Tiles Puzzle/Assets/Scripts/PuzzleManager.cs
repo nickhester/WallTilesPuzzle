@@ -6,8 +6,9 @@ public class PuzzleManager : MonoBehaviour
 {
 	private List<TileBase> baseTiles = new List<TileBase>();
 	private List<TileObject> objectTiles = new List<TileObject>();
-	public GameObject playerPrefab;
-	private TileObject_Player player;
+	public GameObject tilePlayerPrefab;
+	private TileObject_Player tilePlayer;
+	private bool isPuzzleActive = true;
 
 	void Start ()
 	{
@@ -37,20 +38,32 @@ public class PuzzleManager : MonoBehaviour
 		// spawn player on player start
 		if (playerStartTile != null)
 		{
-			GameObject playerGo = (Instantiate(playerPrefab) as GameObject);
-			player = playerGo.GetComponent<TileObject_Player>();
+			GameObject playerGo = (Instantiate(tilePlayerPrefab) as GameObject);
+			tilePlayer = playerGo.GetComponent<TileObject_Player>();
 			TileBase _tileBase = playerStartTile.GetComponentInParent<TileBase>();
-			player.transform.SetParent(_tileBase.transform);
+			tilePlayer.transform.SetParent(_tileBase.transform);
 			playerGo.GetComponent<TileObject>().MoveToBaseTile(_tileBase);
 		}
 		else
 		{
 			Debug.LogError("Puzzle found no player start tile");
 		}
+
+		SetPuzzleActive(false);
 	}
-	
-	void Update ()
+
+	public void SetPuzzleActive(bool _isActive)
 	{
-		
+		isPuzzleActive = _isActive;
+		foreach (TileBase tileBase in baseTiles)
+		{
+			tileBase.gameObject.SetActive(_isActive);
+		}
+	}
+
+	public void CompletePuzzle()
+	{
+		print("You Reached The Exit!");
+		SetPuzzleActive(false);
 	}
 }

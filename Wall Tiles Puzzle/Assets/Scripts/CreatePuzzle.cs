@@ -96,6 +96,6 @@ public class CreatePuzzle : MonoBehaviour
 			serializedObject.ApplyModifiedProperties();
 		}
 
-		// validate positions and traversability
+		// TODO: validate positions and traversability
 	}
 }
