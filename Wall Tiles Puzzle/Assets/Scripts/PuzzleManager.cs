@@ -49,7 +49,7 @@ public class PuzzleManager : MonoBehaviour
 			Debug.LogError("Puzzle found no player start tile");
 		}
 
-		SetPuzzleActive(false);
+		// SetPuzzleActive(false);
 	}
 
 	public void SetPuzzleActive(bool _isActive)
@@ -64,6 +64,6 @@ public class PuzzleManager : MonoBehaviour
 	public void CompletePuzzle()
 	{
 		print("You Reached The Exit!");
-		SetPuzzleActive(false);
+		GetComponentInParent<PuzzleTrigger>().ReceivePuzzleComplete();
 	}
 }
