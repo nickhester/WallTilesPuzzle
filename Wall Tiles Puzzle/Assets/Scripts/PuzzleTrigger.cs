@@ -29,6 +29,12 @@ public class PuzzleTrigger : MonoBehaviour
 		myPuzzleInstance = null;
 	}
 
+	public void ReceivePuzzleCancel()
+	{
+		Destroy(myPuzzleInstance);
+		myPuzzleInstance = null;
+	}
+
 	public void PuzzleReportIn(string _sceneName)
 	{
 		if (_sceneName == myPuzzleSceneName)

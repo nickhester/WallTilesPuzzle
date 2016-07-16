@@ -16,6 +16,12 @@ public abstract class TileObject : MonoBehaviour
 		LaserB
 	}
 
+	public enum EffectType
+	{
+		LaserA,
+		LaserB
+	}
+
 	public enum Direction
 	{
 		UP,
@@ -25,8 +31,7 @@ public abstract class TileObject : MonoBehaviour
 	}
 
 	protected int ccwRotation = 0;
-
-	public abstract bool ObjectAttemptsToMoveOnToMe(TileObject _tileObject, Direction _fromDirection);
+	private float tileAcrossCheckRayMaxDistance = 100.0f;
 
 	public bool MoveToBaseTile(Direction _comingFromDirection, TileBase _tileBase, int _ccwRotation)
 	{
@@ -163,10 +168,9 @@ public abstract class TileObject : MonoBehaviour
 		return false;
 	}
 
-	
-	List<TileObject> GetTileObjectsAcross()
+	protected List<TileObject> GetTileObjectsAcross()
 	{
-		TileBase tb = GetComponentInParent<PuzzleManager>().GetBaseTileAcross(GetComponentInParent<TileBase>());
+		TileBase tb = GetBaseTileAcross();
 		if (tb != null)
 		{
 			List<TileObject> retList = new List<TileObject>();
@@ -175,4 +179,41 @@ public abstract class TileObject : MonoBehaviour
 		}
 		return null;
 	}
+
+	public TileBase GetBaseTileAcross()
+	{
+		TileBase _tileOrigin = GetComponentInParent<TileBase>();
+		Ray ray = new Ray(_tileOrigin.transform.position, -_tileOrigin.transform.forward);
+		RaycastHit hit;
+
+		TileBase hitTile = null;
+		if (Physics.Raycast(ray, out hit, tileAcrossCheckRayMaxDistance))
+		{
+			hitTile = hit.transform.gameObject.GetComponent<TileBase>();
+			if (hitTile == null)
+			{
+				hitTile = hit.transform.GetComponentInParent<TileBase>();
+			}
+		}
+
+		return hitTile;
+	}
+
+	public GameObject CheckAcrossForObject()
+	{
+		TileBase _tileOrigin = GetComponentInParent<TileBase>();
+		Ray ray = new Ray(_tileOrigin.transform.position, -_tileOrigin.transform.forward);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, tileAcrossCheckRayMaxDistance))
+		{
+			return hit.transform.gameObject;
+		}
+		return null;
+	}
+
+	// abstract and virtual classes
+	public abstract bool ObjectAttemptsToMoveOnToMe(TileObject _tileObject, Direction _fromDirection);
+
+	public virtual void GetHitByEffect(EffectType _effectType) { }
 }

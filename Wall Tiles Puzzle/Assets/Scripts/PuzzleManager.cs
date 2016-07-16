@@ -11,8 +11,6 @@ public class PuzzleManager : MonoBehaviour
 	private TileObject_Player tilePlayer;
 	private bool isPuzzleActive = true;
 
-	private float tileAcrossCheckRayMaxDistance = 100.0f;
-
 	void Start ()
 	{
 		List<PuzzleTrigger> puzzleTriggers = new List<PuzzleTrigger>();
@@ -77,23 +75,8 @@ public class PuzzleManager : MonoBehaviour
 		GetComponentInParent<PuzzleTrigger>().ReceivePuzzleComplete();
 	}
 
-	public TileBase GetBaseTileAcross(TileBase _tileOrigin)
+	public void CancelPuzzle()
 	{
-		Ray ray = new Ray(_tileOrigin.transform.position, -_tileOrigin.transform.forward);
-		RaycastHit hit;
-
-		Debug.DrawRay(ray.origin, ray.direction * tileAcrossCheckRayMaxDistance, Color.red, 5.0f);
-
-		TileBase hitTile = null;
-		if (Physics.Raycast(ray, out hit, tileAcrossCheckRayMaxDistance))
-		{
-			hitTile = hit.transform.gameObject.GetComponent<TileBase>();
-			if (hitTile == null)
-			{
-				hitTile = hit.transform.GetComponentInParent<TileBase>();
-			}
-		}
-
-		return hitTile;
+		GetComponentInParent<PuzzleTrigger>().ReceivePuzzleCancel();
 	}
 }

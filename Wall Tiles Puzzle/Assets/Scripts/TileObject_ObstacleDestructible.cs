@@ -7,4 +7,12 @@ public class TileObject_ObstacleDestructible : TileObject
 	{
 		return false;
 	}
+
+	public override void GetHitByEffect(EffectType _effectType)
+	{
+		if (_effectType == EffectType.LaserB)
+		{
+			Destroy(gameObject);
+		}
+	}
 }

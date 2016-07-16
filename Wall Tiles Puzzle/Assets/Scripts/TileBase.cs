@@ -15,8 +15,6 @@ public class TileBase : MonoBehaviour
 	public int neighborDownRotation;
 	public int neighborLeftRotation;
 
-	//public List<TileBase> TilesOnMe = new List<TileBase>();	// not using this now
-
 	public List<TileObject> GetAllOccupyingTileObjects()
 	{
 		List<TileObject> retList = new List<TileObject>();
