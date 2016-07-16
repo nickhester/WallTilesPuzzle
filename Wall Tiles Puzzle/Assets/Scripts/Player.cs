@@ -17,8 +17,6 @@ public class Player : MonoBehaviour
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 
-			Debug.DrawRay(ray.origin, ray.direction * rayMaxDistance, Color.red, 5.0f);
-
 			if (Physics.Raycast(ray, out hit, rayMaxDistance))
 			{
 				PuzzleTrigger pt = hit.transform.gameObject.GetComponent<PuzzleTrigger>();

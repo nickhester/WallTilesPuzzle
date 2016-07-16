@@ -2,3 +2,6 @@ sceneSetups:
 - path: Assets/Scenes/testLevel.unity
   isLoaded: 1
   isActive: 1
+- path: Assets/Scenes/puzzle_test1.unity
+  isLoaded: 1
+  isActive: 0

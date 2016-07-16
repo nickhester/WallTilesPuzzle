@@ -10,7 +10,10 @@ public abstract class TileObject : MonoBehaviour
 		PlayerStart,
 		Exit,
 		Obstacle,
-		Crate
+		ObstacleDestructible,
+		Crate,
+		LaserA,
+		LaserB
 	}
 
 	public enum Direction
@@ -158,5 +161,18 @@ public abstract class TileObject : MonoBehaviour
 			}
 		}
 		return false;
+	}
+
+	
+	List<TileObject> GetTileObjectsAcross()
+	{
+		TileBase tb = GetComponentInParent<PuzzleManager>().GetBaseTileAcross(GetComponentInParent<TileBase>());
+		if (tb != null)
+		{
+			List<TileObject> retList = new List<TileObject>();
+			retList.AddRange(tb.GetComponentsInChildren<TileObject>());
+			return retList;
+		}
+		return null;
 	}
 }

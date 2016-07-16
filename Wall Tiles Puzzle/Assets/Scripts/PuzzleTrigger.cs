@@ -1,22 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PuzzleTrigger : MonoBehaviour
 {
-	public GameObject myPuzzlePrefab;
-	private GameObject myPuzzleInstance;
+	public string myPuzzleSceneName;
+	private GameObject myPuzzleInstance = null;
 	private bool puzzleIsActive = false;
 	
 	public void ReceivePlayerActivate()
 	{
 		if (!puzzleIsActive)
 		{
-			Transform puzzleBaseTransform = transform.GetChild(0);
-			myPuzzleInstance = Instantiate(myPuzzlePrefab, puzzleBaseTransform.position, Quaternion.identity) as GameObject;
-			myPuzzleInstance.transform.SetParent(puzzleBaseTransform);
-			myPuzzleInstance.transform.localRotation = Quaternion.identity;
-			myPuzzleInstance.transform.localScale = Vector3.one;
-
+			SceneManager.LoadScene(myPuzzleSceneName, LoadSceneMode.Additive);
 			puzzleIsActive = true;
 		}
 		else
@@ -31,5 +27,18 @@ public class PuzzleTrigger : MonoBehaviour
 	{
 		Destroy(myPuzzleInstance);
 		myPuzzleInstance = null;
+	}
+
+	public void PuzzleReportIn(string _sceneName)
+	{
+		if (_sceneName == myPuzzleSceneName)
+		{
+			Scene s = SceneManager.GetSceneByName(myPuzzleSceneName);
+			myPuzzleInstance = s.GetRootGameObjects()[0];
+			SceneManager.MoveGameObjectToScene(myPuzzleInstance, gameObject.scene);
+			SceneManager.UnloadScene(myPuzzleSceneName);
+
+			myPuzzleInstance.transform.SetParent(transform);
+		}
 	}
 }
