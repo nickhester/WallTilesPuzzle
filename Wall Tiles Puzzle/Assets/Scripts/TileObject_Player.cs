@@ -31,12 +31,20 @@ public class TileObject_Player : TileObject
 
 		if (isReceivingDirectionalInput)
 		{
-			MoveObject((Direction)(((int)inputDirection + ccwRotation) % 4));
+			TryMoveObject((Direction)(((int)inputDirection + ccwRotation) % 4));
 		}
 	}
 
-	public override bool ObjectAttemptsToMoveOnToMe(TileObject _tileObject, TileObject.Direction _fromDirection)
+	public override bool CheckIfObjectCanMoveOnMe(TileObject _tileObject, TileObject.Direction _fromDirection)
 	{
 		return false;
+	}
+
+	public override void GetHitByEffect(EffectType _effectType)
+	{
+		if (_effectType == EffectType.LaserA || _effectType == EffectType.LaserB)
+		{
+			GetComponentInParent<PuzzleManager>().CancelPuzzle();
+		}
 	}
 }

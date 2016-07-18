@@ -13,7 +13,9 @@ public abstract class TileObject : MonoBehaviour
 		ObstacleDestructible,
 		Crate,
 		LaserA,
-		LaserB
+		LaserB,
+		Gate,
+		PressurePlate
 	}
 
 	public enum EffectType
@@ -44,7 +46,7 @@ public abstract class TileObject : MonoBehaviour
 		{
 			foreach (TileObject _tileObject in _tileBase.GetAllOccupyingTileObjects())
 			{
-				if (!_tileObject.ObjectAttemptsToMoveOnToMe(this, _comingFromDirection))
+				if (!_tileObject.CheckIfObjectCanMoveOnMe(this, _comingFromDirection))
 				{
 					return false;
 				}
@@ -72,10 +74,9 @@ public abstract class TileObject : MonoBehaviour
 		return GetComponentInParent<TileBase>();
 	}
 
-	public bool MoveObject(Direction _direction)
+	public bool TryMoveObject(Direction _direction)
 	{
-		TileObject myTileObject = GetComponent<TileObject>();
-		TileBase myTileBase = myTileObject.GetBaseTile();
+		TileBase myTileBase = GetBaseTile();
 		TileBase tileToMoveTo = null;
 		switch (_direction)
 		{
@@ -158,9 +159,34 @@ public abstract class TileObject : MonoBehaviour
 				_ccwRotation = 0;
 			}
 
-			// if move is allowed by destination objects
-			if (myTileObject.MoveToBaseTile(tileToMoveTo.WhichDirectionIsNeighbor(myTileBase), tileToMoveTo, _ccwRotation))
+			// First check if current tile allows the move off
+			foreach (TileObject _tileObject in myTileBase.GetAllOccupyingTileObjects())
 			{
+				if (!_tileObject.CheckIfObjectCanMoveOffMe(this, _direction))
+				{
+					return false;
+				}
+			}
+
+			// if move is allowed by destination objects
+			if (MoveToBaseTile(tileToMoveTo.WhichDirectionIsNeighbor(myTileBase), tileToMoveTo, _ccwRotation))
+			{
+				// call "on object move" events
+				foreach (TileObject targetTileObject in tileToMoveTo.GetAllOccupyingTileObjects())
+				{
+					if (targetTileObject != this)
+					{
+						targetTileObject.OnObjectMoveOn(this, _direction);
+					}
+				}
+				foreach (TileObject startTileObject in myTileBase.GetAllOccupyingTileObjects())
+				{
+					if (startTileObject != this)
+					{
+						startTileObject.OnObjectMoveOff(startTileObject, _direction);
+					}
+				}
+
 				ccwRotation = _ccwRotation;
 				return true;
 			}
@@ -213,7 +239,16 @@ public abstract class TileObject : MonoBehaviour
 	}
 
 	// abstract and virtual classes
-	public abstract bool ObjectAttemptsToMoveOnToMe(TileObject _tileObject, Direction _fromDirection);
+
+	public virtual bool CheckIfObjectCanMoveOnMe(TileObject _tileObject, Direction _fromDirection) { return true; }
+
+	public virtual bool CheckIfObjectCanMoveOffMe(TileObject _tileObject, Direction _toDirection) { return true; }
+
+	public virtual void OnObjectMoveOn(TileObject _tileObjectMovingOn, Direction _movingDirection) { }
+
+	public virtual void OnObjectMoveOff(TileObject _tileObjectMovingOff, Direction _movingDirection) { }
 
 	public virtual void GetHitByEffect(EffectType _effectType) { }
+
+	public virtual void Activate(bool _isActivating) { }
 }
