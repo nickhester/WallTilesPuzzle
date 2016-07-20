@@ -194,16 +194,28 @@ public abstract class TileObject : MonoBehaviour
 		return false;
 	}
 
-	protected List<TileObject> GetTileObjectsAcross()
+	public class TileSetInfo
+	{
+		public List<TileObject> tileObjects;
+		public TileBase tileBase;
+
+		public TileSetInfo(List<TileObject> _tileObjects, TileBase _tileBase)
+		{
+			tileObjects = _tileObjects;
+			tileBase = _tileBase;
+		}
+	}
+
+	protected TileSetInfo GetTileObjectsAcross()
 	{
 		TileBase tb = GetBaseTileAcross();
 		if (tb != null)
 		{
 			List<TileObject> retList = new List<TileObject>();
 			retList.AddRange(tb.GetComponentsInChildren<TileObject>());
-			return retList;
+			return new TileSetInfo(retList, tb);
 		}
-		return null;
+		return new TileSetInfo(null, null);
 	}
 
 	public TileBase GetBaseTileAcross()

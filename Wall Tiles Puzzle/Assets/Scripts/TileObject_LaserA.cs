@@ -2,19 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TileObject_LaserA : TileObject_Crate
+public class TileObject_LaserA : TileObject_Laser
 {
-	void Update()
+	void Start()
 	{
-		List<TileObject> tileObjectsAcross = GetTileObjectsAcross();
-		if (tileObjectsAcross != null)
-		{
-			foreach (TileObject tiles in tileObjectsAcross)
-			{
-				tiles.GetHitByEffect(EffectType.LaserA);
-			}
-		}
+		effectType = EffectType.LaserA;
 
-		// TODO: also, destroy the tile player
+		base.Start();
 	}
 }
