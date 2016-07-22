@@ -16,12 +16,9 @@ public class TileObject_LaserB : TileObject_Laser
 		base.Update();
 
 		// detect player
-		GameObject intersectingGameObject = CheckAcrossForObject();
-		if (intersectingGameObject != null && intersectingGameObject.tag == "Player")
+		if (acrossHitObject.transform != null && acrossHitObject.transform.tag == "Player")
 		{
 			GetComponentInParent<PuzzleManager>().CancelPuzzle();
-
-			// TODO: trigger buzz pop sizzle effects
 		}
 	}
 }

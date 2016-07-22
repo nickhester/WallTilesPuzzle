@@ -33,7 +33,6 @@ public abstract class TileObject : MonoBehaviour
 	}
 
 	protected int ccwRotation = 0;
-	private float tileAcrossCheckRayMaxDistance = 100.0f;
 
 	public bool MoveToBaseTile(Direction _comingFromDirection, TileBase _tileBase, int _ccwRotation)
 	{
@@ -206,48 +205,19 @@ public abstract class TileObject : MonoBehaviour
 		}
 	}
 
-	protected TileSetInfo GetTileObjectsAcross()
-	{
-		TileBase tb = GetBaseTileAcross();
-		if (tb != null)
-		{
-			List<TileObject> retList = new List<TileObject>();
-			retList.AddRange(tb.GetComponentsInChildren<TileObject>());
-			return new TileSetInfo(retList, tb);
-		}
-		return new TileSetInfo(null, null);
-	}
-
-	public TileBase GetBaseTileAcross()
+	public TileBase GetBaseTileFromObject(GameObject go)
 	{
 		TileBase _tileOrigin = GetComponentInParent<TileBase>();
-		Ray ray = new Ray(_tileOrigin.transform.position, -_tileOrigin.transform.forward);
-		RaycastHit hit;
-
-		TileBase hitTile = null;
-		if (Physics.Raycast(ray, out hit, tileAcrossCheckRayMaxDistance))
+		TileBase retVal = null;
+		if (go != null)
 		{
-			hitTile = hit.transform.gameObject.GetComponent<TileBase>();
-			if (hitTile == null)
+			retVal = go.GetComponent<TileBase>();
+			if (retVal == null)
 			{
-				hitTile = hit.transform.GetComponentInParent<TileBase>();
+				retVal = go.transform.GetComponentInParent<TileBase>();
 			}
 		}
-
-		return hitTile;
-	}
-
-	public GameObject CheckAcrossForObject()
-	{
-		TileBase _tileOrigin = GetComponentInParent<TileBase>();
-		Ray ray = new Ray(_tileOrigin.transform.position, -_tileOrigin.transform.forward);
-		RaycastHit hit;
-
-		if (Physics.Raycast(ray, out hit, tileAcrossCheckRayMaxDistance))
-		{
-			return hit.transform.gameObject;
-		}
-		return null;
+		return retVal;
 	}
 
 	// abstract and virtual classes

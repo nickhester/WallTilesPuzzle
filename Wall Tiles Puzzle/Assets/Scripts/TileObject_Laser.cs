@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TileObject_Laser : TileObject_Crate
 {
@@ -7,6 +8,10 @@ public class TileObject_Laser : TileObject_Crate
 	protected GameObject laserEffectInstance;
 	protected EffectType effectType;
 
+	private float tileAcrossCheckRayMaxDistance = 100.0f;
+	protected RaycastHit acrossHitObject;
+	protected TileSetInfo acrossHitTile = null;
+	
 	protected void Start()
 	{
 		laserEffectInstance = Instantiate(laserEffectPrefab, transform.position, Quaternion.identity) as GameObject;
@@ -17,23 +22,39 @@ public class TileObject_Laser : TileObject_Crate
 
 	protected void Update()
 	{
-		TileSetInfo tileSetAcross = GetTileObjectsAcross();
-
-		if (tileSetAcross.tileBase != null)
+		acrossHitTile = null;
+		acrossHitObject = CheckAcrossForObject();
+		if (acrossHitObject.transform != null)
 		{
-			SetLaserPosition(tileSetAcross.tileBase.transform.position);
+			TileBase tb = GetBaseTileFromObject(acrossHitObject.transform.gameObject);
+			if (tb != null)
+			{
+				acrossHitTile = GetTileSetFromTileBase(tb);
+			}
+		}
+
+		if (acrossHitTile != null)
+		{
+			if (acrossHitTile.tileBase != null)
+			{
+				SetLaserPosition(acrossHitTile.tileBase.transform.position);
+			}
+
+			if (acrossHitTile.tileObjects.Count > 0)
+			{
+				foreach (TileObject tiles in acrossHitTile.tileObjects)
+				{
+					tiles.GetHitByEffect(effectType);
+				}
+			}
+		}
+		else if (acrossHitObject.transform != null)
+		{
+			SetLaserPosition(acrossHitObject.point);
 		}
 		else
 		{
 			SetLaserPosition();
-		}
-
-		if (tileSetAcross.tileObjects != null)
-		{
-			foreach (TileObject tiles in tileSetAcross.tileObjects)
-			{
-				tiles.GetHitByEffect(effectType);
-			}
 		}
 	}
 
@@ -52,4 +73,25 @@ public class TileObject_Laser : TileObject_Crate
 	{
 		SetLaserPosition(transform.position + (-transform.forward * 4.0f));
 	}
+
+	protected TileSetInfo GetTileSetFromTileBase(TileBase tb)
+	{
+		List<TileObject> retList = new List<TileObject>();
+		retList.AddRange(tb.GetComponentsInChildren<TileObject>());
+		return new TileSetInfo(retList, tb);
+	}
+
+	public RaycastHit CheckAcrossForObject()
+	{
+		TileBase _tileOrigin = GetComponentInParent<TileBase>();
+		Ray ray = new Ray(_tileOrigin.transform.position, -_tileOrigin.transform.forward);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, tileAcrossCheckRayMaxDistance))
+		{
+			return hit;
+		}
+		return hit;
+	}
+
 }
