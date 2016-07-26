@@ -13,9 +13,9 @@ public class PuzzleManager : MonoBehaviour
 
 	void Start ()
 	{
-		List<PuzzleTrigger> puzzleTriggers = new List<PuzzleTrigger>();
-		puzzleTriggers.AddRange(GameObject.FindObjectsOfType<PuzzleTrigger>());
-		foreach(PuzzleTrigger pt in puzzleTriggers)
+		List<PuzzleTrigger_Start> puzzleTriggers = new List<PuzzleTrigger_Start>();
+		puzzleTriggers.AddRange(GameObject.FindObjectsOfType<PuzzleTrigger_Start>());
+		foreach (PuzzleTrigger_Start pt in puzzleTriggers)
 		{
 			pt.PuzzleReportIn(gameObject.scene.name);
 		}
@@ -72,11 +72,11 @@ public class PuzzleManager : MonoBehaviour
 	public void CompletePuzzle()
 	{
 		print("You Reached The Exit!");
-		GetComponentInParent<PuzzleTrigger>().ReceivePuzzleComplete();
+		GetComponentInParent<PuzzleTrigger_Start>().ReceivePuzzleComplete();
 	}
 
 	public void CancelPuzzle()
 	{
-		GetComponentInParent<PuzzleTrigger>().ReceivePuzzleCancel();
+		GetComponentInParent<PuzzleTrigger_Start>().ReceivePuzzleCancel();
 	}
 }

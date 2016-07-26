@@ -2,49 +2,26 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class PuzzleTrigger : MonoBehaviour
+public abstract class PuzzleTrigger : MonoBehaviour
 {
-	public string myPuzzleSceneName;
-	private GameObject myPuzzleInstance = null;
-	private bool puzzleIsActive = false;
-	
-	public void ReceivePlayerActivate()
+	protected GameObject myPuzzleInstance = null;
+	protected bool puzzleIsActive = false;
+	public bool isEnabledAtStart = false;
+	private bool isEnabled = false;
+
+	void Start()
 	{
-		if (!puzzleIsActive)
+		if (!isEnabledAtStart)
 		{
-			SceneManager.LoadScene(myPuzzleSceneName, LoadSceneMode.Additive);
-			puzzleIsActive = true;
-		}
-		else
-		{
-			Destroy(myPuzzleInstance);
-			myPuzzleInstance = null;
-			puzzleIsActive = false;
+			Enable(false);
 		}
 	}
 
-	public void ReceivePuzzleComplete()
-	{
-		Destroy(myPuzzleInstance);
-		myPuzzleInstance = null;
-	}
+	public abstract void ReceivePlayerActivate();
 
-	public void ReceivePuzzleCancel()
+	public void Enable(bool _enable)
 	{
-		Destroy(myPuzzleInstance);
-		myPuzzleInstance = null;
-	}
-
-	public void PuzzleReportIn(string _sceneName)
-	{
-		if (_sceneName == myPuzzleSceneName)
-		{
-			Scene s = SceneManager.GetSceneByName(myPuzzleSceneName);
-			myPuzzleInstance = s.GetRootGameObjects()[0];
-			SceneManager.MoveGameObjectToScene(myPuzzleInstance, gameObject.scene);
-			SceneManager.UnloadScene(myPuzzleSceneName);
-
-			myPuzzleInstance.transform.SetParent(transform);
-		}
+		isEnabled = _enable;
+		gameObject.SetActive(_enable);
 	}
 }
