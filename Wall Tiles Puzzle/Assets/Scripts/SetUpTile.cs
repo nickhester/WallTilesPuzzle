@@ -15,22 +15,24 @@ public class SetUpTile : MonoBehaviour
 
 	public void TranslateTile(int moveX, int moveY, int moveZ)
 	{
+		UpdateInEditor(indexX + moveX, indexY + moveY, indexZ + moveZ, facingDirection);
+		UpdateTransform();
+	}
+
+	public void UpdateInEditor(int posX, int posY, int posZ, Vector3 dir)
+	{
 		SerializedObject serializedObject = new SerializedObject(this);
 		SerializedProperty sp_indexX = serializedObject.FindProperty("indexX");
 		SerializedProperty sp_indexY = serializedObject.FindProperty("indexY");
 		SerializedProperty sp_indexZ = serializedObject.FindProperty("indexZ");
+		SerializedProperty sp_facingDirection = serializedObject.FindProperty("facingDirection");
 
-		indexX += moveX;
-		indexY += moveY;
-		indexZ += moveZ;
+		sp_indexX.intValue = posX;
+		sp_indexY.intValue = posY;
+		sp_indexZ.intValue = posZ;
+		sp_facingDirection.vector3Value = dir;
 
-		sp_indexX.intValue = indexX;
-		sp_indexY.intValue = indexY;
-		sp_indexZ.intValue = indexZ;
-		
 		serializedObject.ApplyModifiedProperties();
-
-		UpdateTransform();
 	}
 
 	public void OrientTile(Vector3 _facingDirection)

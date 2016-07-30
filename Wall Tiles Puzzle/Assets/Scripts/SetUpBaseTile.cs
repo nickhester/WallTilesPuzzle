@@ -14,5 +14,9 @@ public class SetUpBaseTile : MonoBehaviour
 		go.transform.localPosition = transform.localPosition;
 		go.transform.localRotation = transform.localRotation;
 		go.transform.localScale = transform.localScale;
+
+		SetUpTile createdSetUpTile = go.GetComponent<SetUpTile>();
+		SetUpTile mySetUpTile = GetComponent<SetUpTile>();
+		createdSetUpTile.UpdateInEditor(mySetUpTile.indexX, mySetUpTile.indexY, mySetUpTile.indexZ, mySetUpTile.facingDirection);
 	}
 }
