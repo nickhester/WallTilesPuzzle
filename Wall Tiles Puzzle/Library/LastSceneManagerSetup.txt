@@ -3,11 +3,14 @@ sceneSetups:
   isLoaded: 1
   isActive: 1
 - path: Assets/Scenes/puzzle_test2_01.unity
-  isLoaded: 1
+  isLoaded: 0
   isActive: 0
 - path: Assets/Scenes/puzzle_test2_02.unity
-  isLoaded: 1
+  isLoaded: 0
   isActive: 0
 - path: Assets/Scenes/puzzle_test2_03.unity
-  isLoaded: 1
+  isLoaded: 0
+  isActive: 0
+- path: Assets/Scenes/puzzle_test2_04.unity
+  isLoaded: 0
   isActive: 0
