@@ -11,6 +11,7 @@ public abstract class TileObject : MonoBehaviour
 		Exit,
 		Obstacle,
 		ObstacleDestructible,
+		ObstaclePlayerDestructible,
 		Crate,
 		LaserA,
 		LaserB,
@@ -233,4 +234,6 @@ public abstract class TileObject : MonoBehaviour
 	public virtual void GetHitByEffect(EffectType _effectType) { }
 
 	public virtual void Activate(bool _isActivating) { }
+
+	public virtual void GetHitByPlayer() { }
 }

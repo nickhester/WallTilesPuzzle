@@ -29,7 +29,10 @@ public class PuzzleTrigger_Start : PuzzleTrigger
 		myPuzzleInstance = null;
 
 		// activate next trigger
-		puzzleTriggerTarget.Enable(true);
+		if (puzzleTriggerTarget != null)
+		{
+			puzzleTriggerTarget.Enable(true);
+		}
 	}
 
 	public void ReceivePuzzleCancel()

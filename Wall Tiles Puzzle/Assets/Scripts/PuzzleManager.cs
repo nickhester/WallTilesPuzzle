@@ -71,7 +71,6 @@ public class PuzzleManager : MonoBehaviour
 
 	public void CompletePuzzle()
 	{
-		print("You Reached The Exit!");
 		GetComponentInParent<PuzzleTrigger_Start>().ReceivePuzzleComplete();
 	}
 

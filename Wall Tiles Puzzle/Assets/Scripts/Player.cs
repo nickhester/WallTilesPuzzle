@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -23,6 +24,16 @@ public class Player : MonoBehaviour
 				if (pt != null)
 				{
 					pt.ReceivePlayerActivate();
+				}
+
+				TileBase tb = hit.transform.gameObject.GetComponent<TileBase>();
+				if (tb != null)
+				{
+					List<TileObject> tileObjects = tb.GetAllOccupyingTileObjects();
+					for (int i = 0; i < tileObjects.Count; i++)
+					{
+						tileObjects[i].GetHitByPlayer();
+					}
 				}
 			}
 		}
