@@ -22,6 +22,20 @@ public class CreatePuzzle : MonoBehaviour
 		List<SetUpBaseTile> setUpBaseTiles = new List<SetUpBaseTile>();
 		setUpBaseTiles.AddRange(transform.GetComponentsInChildren<SetUpBaseTile>());
 
+		// make sure no base tiles occupy the same space
+		for (int i = 0; i < setUpBaseTiles.Count; i++)
+		{
+			for (int j = i + 1; j < setUpBaseTiles.Count; j++)
+			{
+				if(setUpBaseTiles[i].GetComponent<SetUpTile>().indexX == setUpBaseTiles[j].GetComponent<SetUpTile>().indexX
+					&& setUpBaseTiles[i].GetComponent<SetUpTile>().indexY == setUpBaseTiles[j].GetComponent<SetUpTile>().indexY
+					&& setUpBaseTiles[i].GetComponent<SetUpTile>().indexZ == setUpBaseTiles[j].GetComponent<SetUpTile>().indexZ)
+				{
+					Debug.LogWarning("2 Base Tiles at same location: " + setUpBaseTiles[i].gameObject.name + " and " + setUpBaseTiles[j].gameObject.name);
+				}
+			}
+		}
+
 		// find neighbors for each tile
 		foreach (SetUpBaseTile setUpBaseTile in setUpBaseTiles)
 		{
