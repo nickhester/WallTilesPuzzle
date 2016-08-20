@@ -12,12 +12,12 @@ public class TileObject_ObstaclePlayerDestructable : TileObject
 	{
 		if (_effectType == EffectType.LaserB || _effectType == EffectType.LaserA)
 		{
-			Destroy(gameObject);
+			DestroyTile();
 		}
 	}
 
 	public override void GetHitByPlayer()
 	{
-		Destroy(gameObject);
+		DestroyTile();
 	}
 }

@@ -12,7 +12,7 @@ public class TileObject_ObstacleDestructible : TileObject
 	{
 		if (_effectType == EffectType.LaserB || _effectType == EffectType.LaserA)
 		{
-			Destroy(gameObject);
+			DestroyTile();
 		}
 	}
 }

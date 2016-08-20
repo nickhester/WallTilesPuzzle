@@ -16,7 +16,8 @@ public abstract class TileObject : MonoBehaviour
 		LaserA,
 		LaserB,
 		Gate,
-		PressurePlate
+		PressurePlate,
+		Sentinel
 	}
 
 	public enum EffectType
@@ -236,4 +237,9 @@ public abstract class TileObject : MonoBehaviour
 	public virtual void Activate(bool _isActivating) { }
 
 	public virtual void GetHitByPlayer() { }
+
+	public virtual void DestroyTile()
+	{
+		Destroy(gameObject);
+	}
 }

@@ -56,6 +56,12 @@ public class TileObject_Player : TileObject
 
 	public override bool CheckIfObjectCanMoveOnMe(TileObject _tileObject, TileObject.Direction _fromDirection)
 	{
+		TileObject_Sentinel _tileObjectAsSentinel = _tileObject as TileObject_Sentinel;
+		if (_tileObjectAsSentinel != null)
+		{
+			DestroyTile();
+		}
+
 		return false;
 	}
 
@@ -63,7 +69,12 @@ public class TileObject_Player : TileObject
 	{
 		if (_effectType == EffectType.LaserA || _effectType == EffectType.LaserB)
 		{
-			GetComponentInParent<PuzzleManager>().CancelPuzzle();
+			DestroyTile();
 		}
+	}
+
+	public override void DestroyTile()
+	{
+		GetComponentInParent<PuzzleManager>().CancelPuzzle();
 	}
 }
