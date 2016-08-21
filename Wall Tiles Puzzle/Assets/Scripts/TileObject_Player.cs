@@ -52,6 +52,16 @@ public class TileObject_Player : TileObject
 		{
 			TryMoveObject((Direction)(((int)inputDirection + ccwRotation) % 4));
 		}
+
+		if (Input.GetButtonDown("Cancel"))
+		{
+			DestroyTile();
+		}
+
+		if (Input.GetButtonDown("CheatPass"))
+		{
+			GetComponentInParent<PuzzleManager>().CompletePuzzle();
+		}
 	}
 
 	public override bool CheckIfObjectCanMoveOnMe(TileObject _tileObject, TileObject.Direction _fromDirection)

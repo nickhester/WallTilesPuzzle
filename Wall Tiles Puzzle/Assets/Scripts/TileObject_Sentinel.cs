@@ -11,11 +11,22 @@ public class TileObject_Sentinel : TileObject
 	public SentinelPattern pattern;
 	public float tileMoveInterval = 0.4f;
 	private float tileMoveCounter = 0.0f;
-	Direction inputDirection = Direction.DOWN;
+	Direction inputDirection;
+
+	void Start()
+	{
+		if (pattern == SentinelPattern.Horizontal)
+		{
+			inputDirection = Direction.RIGHT;
+		}
+		else if (pattern == SentinelPattern.Vertical)
+		{
+			inputDirection = Direction.DOWN;
+		}
+	}
 
 	void Update()
 	{
-
 		tileMoveCounter += Time.deltaTime;
 
 		if (tileMoveCounter > tileMoveInterval)
@@ -24,14 +35,8 @@ public class TileObject_Sentinel : TileObject
 
 			if (TryMoveObject((Direction)(((int)inputDirection + ccwRotation) % 4)) == false)
 			{
-				if (inputDirection == Direction.DOWN)
-				{
-					inputDirection = Direction.UP;
-				}
-				else
-				{
-					inputDirection = Direction.DOWN;
-				}
+				inputDirection += 2;
+				inputDirection = (Direction)(((int)inputDirection) % 4);
 			}
 		}
 	}

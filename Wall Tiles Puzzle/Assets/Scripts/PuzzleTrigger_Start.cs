@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class PuzzleTrigger_Start : PuzzleTrigger
 {
 	public string myPuzzleSceneName;
-	public PuzzleTrigger puzzleTriggerTarget;
+	public Triggerable triggerTarget;
 	
 	public override void ReceivePlayerActivate()
 	{
@@ -29,9 +29,9 @@ public class PuzzleTrigger_Start : PuzzleTrigger
 		myPuzzleInstance = null;
 
 		// activate next trigger
-		if (puzzleTriggerTarget != null)
+		if (triggerTarget != null)
 		{
-			puzzleTriggerTarget.Enable(true);
+			triggerTarget.Trigger();
 		}
 	}
 

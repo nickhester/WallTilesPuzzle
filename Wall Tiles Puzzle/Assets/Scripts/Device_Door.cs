@@ -25,11 +25,6 @@ public class Device_Door : Device
 		}
 	}
 
-	public override void Trigger()
-	{
-		isDoorOpening = true;
-	}
-
 	private void OpenDoor()
 	{
 		doorSlideProgress += Time.deltaTime;
@@ -41,5 +36,15 @@ public class Device_Door : Device
 		}
 
 		door.transform.position = Vector3.Lerp(doorOrigin, doorTarget, doorSlideProgress);
+	}
+
+	public override void Trigger()
+	{
+		isDoorOpening = true;
+	}
+
+	public override bool GetIsTriggered()
+	{
+		return (isDoorOpening || isDoorOpen);
 	}
 }

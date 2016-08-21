@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Device : MonoBehaviour
+public abstract class Device : Triggerable
 {
-
-	public abstract void Trigger();
+	
 }

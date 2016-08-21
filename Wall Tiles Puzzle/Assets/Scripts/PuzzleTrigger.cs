@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public abstract class PuzzleTrigger : MonoBehaviour
+public abstract class PuzzleTrigger : Triggerable
 {
 	protected GameObject myPuzzleInstance = null;
 	protected bool puzzleIsActive = false;
@@ -18,6 +18,11 @@ public abstract class PuzzleTrigger : MonoBehaviour
 	}
 
 	public abstract void ReceivePlayerActivate();
+
+	public override void Trigger()
+	{
+		Enable(true);
+	}
 
 	public void Enable(bool _enable)
 	{
